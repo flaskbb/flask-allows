@@ -19,7 +19,7 @@ def test_cant_create_Requirement():
     with pytest.raises(TypeError) as excinfo:
         Requirement()
 
-    assert "with abstract method fulfill" in str(excinfo)
+    assert "with abstract methods fulfill" in str(excinfo)
 
 
 def test_call_fulfills_with_call(spy):
