@@ -5,12 +5,11 @@ from itertools import chain
 from flask import current_app, request
 from werkzeug.datastructures import ImmutableDict
 from werkzeug.exceptions import Forbidden
-from werkzeug.local import LocalProxy
 
 from .additional import Additional, AdditionalManager
 from .overrides import Override, OverrideManager
 
-__all__ = ("Allows", "allows")
+__all__ = ("Allows")
 
 
 class Allows(object):
@@ -217,14 +216,23 @@ class Allows(object):
                 return result
             raise throws
 
+def _get_allows(app=None, silent=False):
+    """Gets the application-specific Allows data.
 
-def __get_allows():
-    "Internal helper"
-    try:
-        return current_app.extensions["allows"]
-    except (AttributeError, KeyError):
+    :param app: The Flask application. Defaults to the current app.
+    :param silent: If set to True, it will return ``None`` instead of raising
+                   a ``RuntimeError``.
+    """
+    if app is None:
+        app = current_app
+
+    if silent and (not app or 'allows' not in app.extensions):
+        return None
+
+    if 'allows' not in app.extensions:
         raise RuntimeError("Flask-Allows not configured against current app")
 
+    return app.extensions['allows']
 
 def _make_callable(func_or_value):
     if not callable(func_or_value):
@@ -244,6 +252,3 @@ def _call_requirement(requirement, user):
         )
 
         return requirement(user, request)
-
-
-allows = LocalProxy(__get_allows, name="flask-allows")

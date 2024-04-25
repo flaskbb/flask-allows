@@ -1,4 +1,4 @@
-from .allows import allows
+from .allows import _get_allows
 
 __all__ = ("Permission",)
 
@@ -51,12 +51,12 @@ class Permission(object):
         self.on_fail = opts.get("on_fail")
 
     def __bool__(self):
-        return allows.fulfill(self.requirements, identity=self.identity)
+        return _get_allows().fulfill(self.requirements, identity=self.identity)
 
     __nonzero__ = __bool__
 
     def __enter__(self):
-        allows.run(
+        _get_allows().run(
             self.requirements,
             identity=self.identity,
             throws=self.throws,

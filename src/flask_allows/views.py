@@ -2,7 +2,7 @@ from functools import wraps
 
 from flask import current_app, request
 
-from .allows import allows
+from .allows import _get_allows
 
 __all__ = ("requires", "exempt_from_requirements", "guard_entire")
 
@@ -47,7 +47,7 @@ def requires(*requirements, **opts):
         @wraps(f)
         def allower(*args, **kwargs):
 
-            result = allows.run(
+            result = _get_allows().run(
                 requirements,
                 identity=identity,
                 on_fail=on_fail,
@@ -191,7 +191,7 @@ def guard_entire(requirements, identity=None, throws=None, on_fail=None):
 
     def guarder():
         if _should_run_requirements():
-            return allows.run(
+            return _get_allows().run(
                 requirements,
                 identity=identity,
                 on_fail=on_fail,

@@ -1,5 +1,5 @@
 from .additional import Additional, AdditionalManager, current_additions
-from .allows import Allows, allows
+from .allows import Allows
 from .overrides import Override, OverrideManager, current_overrides
 from .permission import Permission
 from .requirements import (
@@ -16,7 +16,6 @@ from .views import exempt_from_requirements, guard_entire, requires
 __all__ = (
     "Additional",
     "AdditionalManager",
-    "allows",
     "Allows",
     "And",
     "C",
